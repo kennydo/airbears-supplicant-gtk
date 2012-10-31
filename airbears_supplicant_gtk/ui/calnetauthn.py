@@ -14,7 +14,7 @@ class CalNetAuthnDialog:
         self.builder.add_from_file(self.glade_file_path())
 
         handlers = {
-            "on_window_destroy": Gtk.main_quit,
+            "on_window_delete_event": Gtk.main_quit,
             "on_clear_button_pressed": self.on_clear_button_pressed,
             "on_save_button_pressed": self.on_save_button_pressed,
         }

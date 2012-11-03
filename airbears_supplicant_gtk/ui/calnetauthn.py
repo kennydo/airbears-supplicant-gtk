@@ -24,7 +24,7 @@ class CalNetAuthnDialog:
         self.password_entry = self.builder.get_object("password_entry")
 
     def glade_file_path(self):
-        return os.path.join(os.path.dirname(__file__), 'glade/calnetauthn.glade')
+        return os.path.join(os.path.dirname(__file__), 'assets', 'calnetauthn.glade')
 
     def show(self):
         window = self.builder.get_object("window")

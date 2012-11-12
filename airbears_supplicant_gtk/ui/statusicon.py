@@ -15,7 +15,9 @@ class StatusIcon:
         self.icon.set_title("AirBears Supplicant")
     
     def icon_path(self, icon_filename="tag_icon.png"):
-        return os.path.join(os.path.dirname(__file__), 'assets', icon_filename)
+        icon_path = os.path.join(os.path.dirname(__file__), 'assets', icon_filename)
+        logger.debug("StatusIcon looking for icon at: %s" % icon_path)
+        return icon_path
 
     def show(self):
         self.icon.show_all()
@@ -31,8 +33,16 @@ class StatusMenu:
         quit_item = Gtk.MenuItem()
         quit_item.set_label("Quit")
         quit_item.connect("activate", Gtk.main_quit)
-
+        
+        separator = Gtk.SeparatorMenuItem()
+        
+        credentials_item = Gtk.MenuItem()
+        credentials_item.set_label("Update CalNet credentials")
+        
+        self.menu.append(credentials_item)
+        self.menu.append(separator)
         self.menu.append(quit_item)
+        
         self.menu.show_all()
 
     def popup(self, button, time):

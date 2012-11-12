@@ -4,7 +4,7 @@ from airbears_supplicant_gtk import log
 
 logger = logging.getLogger(__name__)
 
-class CalNetCredentialStore:
+class CredentialStore:
     def save(self, username, password):
         """
         Save the username and password.
@@ -19,7 +19,7 @@ class CalNetCredentialStore:
         """
         raise NotImplementedError()
 
-class TestCalNetCredentialStore(CalNetCredentialStore):
+class TestCredentialStore(CredentialStore):
     def __init__(self):
         self.has_creds = False
 
@@ -30,3 +30,7 @@ class TestCalNetCredentialStore(CalNetCredentialStore):
 
     def has_credentials(self):
         return self.has_creds
+
+class GnomeCredentialStore(CredentialStore):
+    def __init__(self):
+        self.has_creds = False

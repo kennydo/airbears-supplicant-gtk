@@ -1,1 +1,1 @@
-from airbears_supplicant_gtk.calnet.credentialstore import TestCalNetCredentialStore
+from airbears_supplicant_gtk.calnet.credentialstore import TestCredentialStore

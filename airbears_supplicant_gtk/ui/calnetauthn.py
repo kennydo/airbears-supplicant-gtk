@@ -44,9 +44,9 @@ class CalNetAuthnDialog:
         self.credential_store.save(username, password)
 
 if __name__ == "__main__":
-    from airbears_supplicant_gtk.calnet.credentialstore import TestCalNetCredentialStore
+    from airbears_supplicant_gtk.calnet.credentialstore import TestCredentialStore
 
-    cred_store = TestCalNetCredentialStore()
+    cred_store = TestCredentialStore()
 
     test_window = CalNetAuthnDialog(cred_store)
     test_window.show()

@@ -7,7 +7,14 @@ setup(name='airbears-supplicant-gtk',
       packages=['airbears_supplicant_gtk',
                  'airbears_supplicant_gtk.calnet',
                  'airbears_supplicant_gtk.ui'],
-      data_files=[],
+      package_data={
+        'airbears_supplicant_gtk.ui': ['assets/*.png', 'assets/*.glade'],
+      },
+      entry_points={
+        "gui_scripts": [
+            "airbears_supplicant_gtk = airbears_supplicant_gtk.supplicant:main"
+        ],
+      },
       version='0.1.0',
       long_description="""
                        This supplicant is intended to run in the background on your laptop, so that

@@ -25,6 +25,6 @@ def main(*args, **kwargs):
     supplicant = Supplicant(credential_store)
     supplicant.start()
     
-    
+    # so that Ctrl+C kills the Gtk loop
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     Gtk.main()

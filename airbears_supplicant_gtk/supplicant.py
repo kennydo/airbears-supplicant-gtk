@@ -35,7 +35,9 @@ class Supplicant:
         if ssid == "AirBears":
             self.status_icon.notify("Connected to AirBears. Attempting authentication.")
             logger.debug("Connected to AirBears!")
-            authentication = self.authenticator.authenticate()
+
+            credentials = self.credential_store.get_credentials()
+            authentication = self.authenticator.authenticate(*credentials)
             logger.debug("Authentication returned: %s" % authentication)
         else:
             logger.debug("Connected to non-CalNet-authed network")

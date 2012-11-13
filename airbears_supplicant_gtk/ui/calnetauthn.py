@@ -42,6 +42,7 @@ class CalNetAuthnDialog:
         logger.debug("Save buton pressed with username %s" % username)
 
         self.credential_store.save(username, password)
+        self.on_window_delete_event()
 
     def on_window_delete_event(self, *args):
         self.builder.get_object("window").hide()

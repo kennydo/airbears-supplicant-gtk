@@ -1,4 +1,5 @@
 import logging
+import signal
 
 from airbears_supplicant_gtk import log
 from airbears_supplicant_gtk.calnet import GnomeCredentialStore
@@ -23,4 +24,7 @@ def main(*args, **kwargs):
     credential_store = GnomeCredentialStore()
     supplicant = Supplicant(credential_store)
     supplicant.start()
+    
+    
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
     Gtk.main()

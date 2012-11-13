@@ -14,7 +14,7 @@ class CalNetAuthnDialog:
         self.builder.add_from_file(self.glade_file_path())
 
         handlers = {
-            "on_window_delete_event": Gtk.main_quit,
+            "on_window_delete_event": self.on_window_delete_event,
             "on_clear_button_pressed": self.on_clear_button_pressed,
             "on_save_button_pressed": self.on_save_button_pressed,
         }
@@ -42,6 +42,9 @@ class CalNetAuthnDialog:
         logger.debug("Save buton pressed with username %s" % username)
 
         self.credential_store.save(username, password)
+
+    def on_window_delete_event(self, *args):
+        self.builder.get_object("window").hide()
 
 if __name__ == "__main__":
     from airbears_supplicant_gtk.calnet.credentialstore import TestCredentialStore

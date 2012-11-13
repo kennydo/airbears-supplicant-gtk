@@ -36,14 +36,12 @@ class StatusMenu:
         quit_item.set_label("Quit")
         quit_item.connect("activate", self.on_quit_item_activate)
         
-        separator = Gtk.SeparatorMenuItem()
         
         credentials_item = Gtk.MenuItem()
         credentials_item.set_label("Update CalNet credentials")
         credentials_item.connect("activate", self.on_credentials_item_activate)
         
         self.menu.append(credentials_item)
-        self.menu.append(separator)
         self.menu.append(quit_item)
         
         self.menu.show_all()

@@ -12,7 +12,8 @@ class Supplicant:
     def __init__(self, credential_store):
         self.credential_store = credential_store
         self.status_icon = StatusIcon(self)
-
+        self.status_icon.notify("Ready and waiting for AirBears WiFi")
+        
     def start(self):
         logger.debug("Starting the AirBears Supplicant GTK service")    
     

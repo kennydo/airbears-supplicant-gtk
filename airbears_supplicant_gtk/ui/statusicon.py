@@ -1,3 +1,4 @@
+import dbus
 import logging
 import os
 
@@ -7,6 +8,11 @@ from gi.repository import Gtk
 
 logger = logging.getLogger(__name__)
 
+# constants for dbus
+NOTIFICATION_BUS_NAME = 'org.freedesktop.Notifications'
+NOTIFICATION_OBJECT_PATH = '/org/freedesktop/Notifications'
+NOTIFICATION_INTERFACE_NAME = NOTIFICATION_BUS_NAME
+
 class StatusIcon:
     def __init__(self, service):
         self.icon = Gtk.StatusIcon()
@@ -15,6 +21,11 @@ class StatusIcon:
         self.icon.set_from_file(self.icon_path())
         self.icon.set_title("AirBears Supplicant")
         self.service = service
+        
+        bus = dbus.SessionBus()
+        notification_obj = bus.get_object(NOTIFICATION_BUS_NAME, NOTIFICATION_OBJECT_PATH)
+        self._last_notification = 0
+        self._notification_interface = dbus.Interface(notification_obj, NOTIFICATION_INTERFACE_NAME)
     
     def icon_path(self, icon_filename="tag_icon.png"):
         icon_path = os.path.join(os.path.dirname(__file__), 'assets', icon_filename)
@@ -26,6 +37,17 @@ class StatusIcon:
 
     def on_popup_menu(self, icon, button, time):
         self.menu.popup(button, time)
+    
+    def notify(self, text, timeout_ms=1500):
+        self._last_notification = self._notification_interface.Notify(
+                                    "AirBears Supplicant",
+                                    self._last_notification,
+                                    self.icon_path(),
+                                    "AirBears Supplicant",
+                                    text,
+                                    [],
+                                    [],
+                                    timeout_ms)
 
 class StatusMenu:
     def __init__(self, status_icon):

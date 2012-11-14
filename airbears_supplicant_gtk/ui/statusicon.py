@@ -1,4 +1,3 @@
-import dbus
 import logging
 import os
 
@@ -7,11 +6,6 @@ from airbears_supplicant_gtk.ui import CalNetAuthnDialog
 from gi.repository import Gtk
 
 logger = logging.getLogger(__name__)
-
-# constants for dbus
-NOTIFICATION_BUS_NAME = 'org.freedesktop.Notifications'
-NOTIFICATION_OBJECT_PATH = '/org/freedesktop/Notifications'
-NOTIFICATION_INTERFACE_NAME = NOTIFICATION_BUS_NAME
 
 class StatusIcon:
     def __init__(self, service):
@@ -22,11 +16,6 @@ class StatusIcon:
         self.icon.set_title("AirBears Supplicant")
         self.service = service
         
-        bus = dbus.SessionBus()
-        notification_obj = bus.get_object(NOTIFICATION_BUS_NAME, NOTIFICATION_OBJECT_PATH)
-        self._last_notification = 0
-        self._notification_interface = dbus.Interface(notification_obj, NOTIFICATION_INTERFACE_NAME)
-    
     def icon_path(self, icon_filename="tag_icon.png"):
         icon_path = os.path.join(os.path.dirname(__file__), 'assets', icon_filename)
         logger.debug("StatusIcon looking for icon at: %s" % icon_path)

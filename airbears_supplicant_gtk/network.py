@@ -3,7 +3,7 @@ import logging
 
 from airbears_supplicant_gtk import log
 from dbus.mainloop.glib import DBusGMainLoop
-from gi.repository import GObject, NMClient
+from gi.repository import Gio, GObject, NMClient
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +62,7 @@ class NetworkManagerMonitor(NetworkMonitor):
         except dbus.DBusException, e:
             logger.exception(e)
         self._check_networks()
-    
+
     def _check_networks(self):
         connected_ssids = self.connected_networks()
         for ssid in connected_ssids:
@@ -75,11 +75,14 @@ class NetworkManagerMonitor(NetworkMonitor):
                 logger.debug("NM state change was a device becoming active, so we should check our connected networks")
                 self._check_networks()
 
-    def connected_networks(self):
-        ssids = []
+    def _wifi_devices(self):
         nm_client = NMClient.Client()
         wifi_devices = [device for device in nm_client.get_devices() if isinstance(device, NMClient.DeviceWifi)]
-        for device in wifi_devices:
+        return wifi_devices
+
+    def connected_networks(self):
+        ssids = []
+        for device in self._wifi_devices():
             active_ap = device.get_active_access_point()
             if active_ap:
                 ssids.append(active_ap.get_ssid())

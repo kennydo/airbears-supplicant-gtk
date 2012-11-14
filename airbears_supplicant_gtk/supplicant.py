@@ -2,7 +2,7 @@ import logging
 import signal
 
 from airbears_supplicant_gtk import log
-from airbears_supplicant_gtk.calnet import GnomeCredentialStore, Authenticator
+from airbears_supplicant_gtk.calnet import GnomeCredentialStore, AirBearsAuthenticator, ResCompAuthenticator
 from airbears_supplicant_gtk.network import NetworkManagerMonitor
 from airbears_supplicant_gtk.ui import CalNetAuthnDialog, StatusIcon
 from gi.repository import Gtk
@@ -14,7 +14,6 @@ class Supplicant:
         self.credential_store = credential_store
         self.network_monitor = network_monitor
         self.status_icon = StatusIcon(self)
-        self.authenticator = Authenticator(self)
         
         self._wifi_connected_signal = self.network_monitor.connect('wifi-connected',
                                                                     self.on_wifi_connected)
@@ -35,10 +34,20 @@ class Supplicant:
         if ssid == "AirBears":
             self.status_icon.notify("Connected to AirBears. Attempting authentication.")
             logger.debug("Connected to AirBears!")
+            self.authenticator = AirBearsAuthenticator(self)
 
             credentials = self.credential_store.get_credentials()
-            authentication = self.authenticator.authenticate(*credentials)
-            logger.debug("Authentication returned: %s" % authentication)
+            if credentials:
+                authentication = self.authenticator.authenticate(*credentials)
+
+            logger.debug("Authentication to AirBeras returned: %s" % authentication)
+        elif ssid == "RESCOMP":
+            self.status_icon.notify("Connected to ResComp WiFi. Attempting authentication.")
+            self.authenticator = ResCompAuthenticator(self)
+            credentials = self.credential_store.get_credentials()
+            if credentials:
+                authentication = self.authenticator.authenticate(*credentials)
+            logger.debug("Authenticaton to ResComp returned: %s" % authentication)
         else:
             logger.debug("Connected to non-CalNet-authed network")
 

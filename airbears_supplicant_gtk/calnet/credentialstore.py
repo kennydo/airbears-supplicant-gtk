@@ -65,7 +65,7 @@ class GnomeCredentialStore(CredentialStore):
                 username = base64.b64decode(split[0])
                 password = base64.b64decode(split[1])
             except:
-                logger.deubg("Error base64 decoding credentials")
+                logger.debug("Error base64 decoding credentials")
                 return None
             logger.debug("Successfully retrieved credentials for username: %s" % username)
             return (username, password)
@@ -76,7 +76,7 @@ class GnomeCredentialStore(CredentialStore):
         cached_value = getattr(self, '_cached_item_id', None)
         if cached_value:
             # only 1 keyring item is needed, so it's safe to cache
-            logger.deubg("Retrieved cached keyring item id from cache: %s" % cached_value)
+            logger.debug("Retrieved cached keyring item id from cache: %s" % cached_value)
             return self._cached_item_id
             
         logger.debug("No keyring item id cached, so need to create the item")

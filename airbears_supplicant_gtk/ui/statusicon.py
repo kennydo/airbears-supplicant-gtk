@@ -37,17 +37,7 @@ class StatusIcon:
 
     def on_popup_menu(self, icon, button, time):
         self.menu.popup(button, time)
-    
-    def notify(self, text, timeout_ms=1500):
-        self._last_notification = self._notification_interface.Notify(
-                                    "AirBears Supplicant",
-                                    self._last_notification,
-                                    self.icon_path(),
-                                    "AirBears Supplicant",
-                                    text,
-                                    [],
-                                    [],
-                                    timeout_ms)
+ 
 
 class StatusMenu:
     def __init__(self, status_icon):

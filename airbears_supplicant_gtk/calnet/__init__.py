@@ -68,7 +68,7 @@ class ResCompAuthenticator(BaseAuthenticator):
             return True
 
         logger.debug("Trying to authenticate")
-        self.service.status_icon.notify("Awaiting DNS resolution")
+        self.service.notify("Awaiting DNS resolution")
         # looptry until DNS works
         cas_host = urlparse.urlparse(self.cas_url).netloc
         failed_dns_attempts = 0
@@ -76,7 +76,7 @@ class ResCompAuthenticator(BaseAuthenticator):
             try:
                 addr_info = socket.getaddrinfo(cas_host, 443)
                 logger.debug("Successfully resolved DNS. Attempting authentication.")
-                self.service.status_icon.notify("DNS is up!")
+                self.service.notify("DNS is up!")
                 break
             except Exception, e:
                 # wait 2 seconds
@@ -85,7 +85,7 @@ class ResCompAuthenticator(BaseAuthenticator):
                 time.sleep(2)
                 failed_dns_attempts += 1
         if not addr_info:
-            self.service.status_icon.notify("DNS resolution failed. Giving up.")
+            self.service.notify("DNS resolution failed. Giving up.")
             return False
             
         calnet_content =  self.url_opener.open(self.cas_url).read()
@@ -107,17 +107,17 @@ class ResCompAuthenticator(BaseAuthenticator):
         logger.debug(login_result)
         if "you provided are incorrect" in login_result:
             logger.debug("Authentication failed because of incorrect CalNet credentials")
-            self.service.status_icon.notify("CalNet authentication failed because of incorrect credentials")
+            self.service.notify("CalNet authentication failed because of incorrect credentials")
             return False
         
         if "is a required field" in login_result:
             logger.debug("Authentication failed because of empty username or password")
-            self.service.status_icon.notify("CalNet authentication failed because of empty username or password")
+            self.service.notify("CalNet authentication failed because of empty username or password")
             return False
        
         if "Login Successful" in login_result:
             logger.debug("Authentication completed without WLAN redirect")
-            self.service.status_icon.notify("Successfully authenticated to CalNet")
+            self.service.notify("Successfully authenticated to CalNet")
             return True
         return False
 
@@ -129,7 +129,7 @@ class AirBearsAuthenticator(BaseAuthenticator):
         self.landing_url = AIRBEARS_LANDING_URL
 
     def authenticate(self, username, password):
-        self.service.status_icon.notify("Awaiting DNS resolution")
+        self.service.notify("Awaiting DNS resolution")
         # looptry until DNS works
         cas_host = urlparse.urlparse(self.cas_url).netloc
         failed_dns_attempts = 0
@@ -137,7 +137,7 @@ class AirBearsAuthenticator(BaseAuthenticator):
             try:
                 addr_info = socket.getaddrinfo(cas_host, 443)
                 logger.debug("Successfully resolved DNS. Attempting authentication.")
-                self.service.status_icon.notify("DNS is up!")
+                self.service.notify("DNS is up!")
                 break
             except Exception, e:
                 # wait 2 seconds
@@ -146,7 +146,7 @@ class AirBearsAuthenticator(BaseAuthenticator):
                 time.sleep(2)
                 failed_dns_attempts += 1
         if not addr_info:
-            self.service.status_icon.notify("DNS resolution failed. Giving up.")
+            self.service.notify("DNS resolution failed. Giving up.")
             return False
             
         calnet_content =  self.url_opener.open(cas_url).read()
@@ -165,17 +165,17 @@ class AirBearsAuthenticator(BaseAuthenticator):
         login_result = self.url_opener.open(self.cas_url, post_data).read()
         if "you provided are incorrect" in login_result:
             logger.debug("Authentication failed because of incorrect CalNet credentials")
-            self.service.status_icon.notify("CalNet authentication failed because of incorrect credentials")
+            self.service.notify("CalNet authentication failed because of incorrect credentials")
             return False
         
         if "is a required field" in login_result:
             logger.debug("Authentication failed because of empty username or password")
-            self.service.status_icon.notify("CalNet authentication failed because of empty username or password")
+            self.service.notify("CalNet authentication failed because of empty username or password")
             return False
        
         if "successfully logged into" in login_result:
             logger.debug("Authentication completed without WLAN redirect")
-            self.service.status_icon.notify("Successfully authenticated to CalNet")
+            self.service.notify("Successfully authenticated to CalNet")
             return True
         else:
             content = self.url_opener.open(self.landing_url).read()

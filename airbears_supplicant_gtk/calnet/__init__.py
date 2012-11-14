@@ -58,7 +58,7 @@ class ResCompAuthenticator(BaseAuthenticator):
         logger.debug("Got net-auth-host: %s" % self.net_auth_host)
 
         self.cas_url = "https://auth.berkeley.edu/cas/login?%s" % urllib.urlencode({
-            "service": redirected.url
+            "service": "https://auth.berkeley.edu/cas//login?service=https://%s/cgi-bin/pub/nac-web-auth/nac-auth?requested_url=" % self.net_auth_host
         })
         self.landing_url = redirected.url
 

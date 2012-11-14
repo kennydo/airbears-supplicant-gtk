@@ -3,7 +3,7 @@ import logging
 
 from airbears_supplicant_gtk import log
 from dbus.mainloop.glib import DBusGMainLoop
-from gi.repository import GObject
+from gi.repository import GObject, NMClient
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +50,7 @@ class NetworkManagerMonitor(NetworkMonitor):
     DBUS_PROPERTIES_INTERFACE = 'org.freedesktop.DBus.Properties'
 
     NM_DEVICE_STATE_ACTIVATED = 100
-        
+    
     def register(self):
         DBusGMainLoop(set_as_default=True)
         bus = dbus.SystemBus()
@@ -77,23 +77,11 @@ class NetworkManagerMonitor(NetworkMonitor):
 
     def connected_networks(self):
         ssids = []
-
-        bus = dbus.SystemBus()
-        nm_proxy = bus.get_object(self.NM_SERVICE, self.NM_OBJECT)
-        nm_iface = dbus.Interface(nm_proxy, self.NM_INTERFACE)
-        nm_props = dbus.Interface(nm_proxy, self.DBUS_PROPERTIES_INTERFACE)
-
-        active_cons = nm_props.Get(self.NM_INTERFACE, "ActiveConnections")
-        for active in active_cons:
-            active_proxy = bus.get_object(self.NM_INTERFACE, active)
-            active_props = dbus.Interface(active_proxy, self.DBUS_PROPERTIES_INTERFACE)
-
-            con_path = active_props.Get("org.freedesktop.NetworkManager.Connection.Active", "Connection")
-            con_proxy = bus.get_object(self.NM_INTERFACE, con_path)
-
-            connection = dbus.Interface(con_proxy, "org.freedesktop.NetworkManager.Settings.Connection")
-            settings = connection.GetSettings()
-            if '802-11-wireless' in settings:
-                ssids.append(_byte_array_to_string(settings['802-11-wireless']['ssid']))
+        nm_client = NMClient.Client()
+        wifi_devices = [device for device in nm_client.get_devices() if isinstance(device, NMClient.DeviceWifi)]
+        for device in wifi_devices:
+            active_ap = device.get_active_access_point()
+            if active_ap:
+                ssids.append(active_ap.get_ssid())
         logger.debug("connected_networks call returned: [%s]" % ",".join(ssids))
         return ssids

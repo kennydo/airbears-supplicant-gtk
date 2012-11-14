@@ -19,15 +19,16 @@ class Supplicant:
         self._wifi_connected_signal = self.network_monitor.connect('wifi-connected',
                                                                     self.on_wifi_connected)
         
-        self.notify("Ready and waiting for AirBears WiFi")
-        
     def start(self):
         logger.debug("Starting the AirBears Supplicant GTK service")
         logger.debug("Registering network monitor")
+        Notify.init("AirBears Supplicant")
         self.network_monitor.register()
+        self.notify("Ready and waiting for AirBears WiFi")
     
     def stop(self):
         logger.debug("Shutting down the AirBears Supplicant GTK service")
+        Notify.uninit()
         Gtk.main_quit()
 
     def notify(self, body):
@@ -60,7 +61,6 @@ class Supplicant:
             logger.debug("Connected to non-CalNet-authed network")
 
 def main(*args, **kwargs):
-    Notify.init("AirBears Supplicant")
     credential_store = GnomeCredentialStore()
     network_monitor = NetworkManagerMonitor()
     supplicant = Supplicant(credential_store, network_monitor)

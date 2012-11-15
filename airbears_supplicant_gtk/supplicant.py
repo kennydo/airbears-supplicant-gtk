@@ -20,11 +20,11 @@ class Supplicant:
                                                                     self.on_wifi_connected)
         
     def start(self):
+        Notify.init("AirBears Supplicant")
+        self.notify("Ready and waiting for AirBears WiFi")
         logger.debug("Starting the AirBears Supplicant GTK service")
         logger.debug("Registering network monitor")
-        Notify.init("AirBears Supplicant")
         self.network_monitor.register()
-        self.notify("Ready and waiting for AirBears WiFi")
     
     def stop(self):
         logger.debug("Shutting down the AirBears Supplicant GTK service")
@@ -49,7 +49,7 @@ class Supplicant:
             if credentials:
                 authentication = self.authenticator.authenticate(*credentials)
 
-            logger.debug("Authentication to AirBeras returned: %s" % authentication)
+            logger.debug("Authentication to AirBears returned: %s" % authentication)
         elif ssid == "RESCOMP":
             self.notify("Connected to ResComp WiFi. Attempting authentication.")
             self.authenticator = ResCompAuthenticator(self)

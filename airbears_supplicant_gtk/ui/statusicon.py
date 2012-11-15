@@ -9,11 +9,6 @@ logger = logging.getLogger(__name__)
 
 class StatusIcon:
     def __init__(self, service):
-        self.icon = Gtk.StatusIcon()
-        self.icon.connect("popup-menu", self.on_popup_menu)
-        self.menu = StatusMenu(self)
-        self.icon.set_from_file(self.icon_path())
-        self.icon.set_title("AirBears Supplicant")
         self.service = service
         
     def icon_path(self, icon_filename="tag_icon.png"):
@@ -22,7 +17,11 @@ class StatusIcon:
         return icon_path
 
     def show(self):
-        self.icon.show_all()
+        self.icon = Gtk.StatusIcon()
+        self.icon.connect("popup-menu", self.on_popup_menu)
+        self.menu = StatusMenu(self)
+        self.icon.set_from_file(self.icon_path())
+        self.icon.set_title("AirBears Supplicant")
 
     def on_popup_menu(self, icon, button, time):
         self.menu.popup(button, time)

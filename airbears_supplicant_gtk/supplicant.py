@@ -35,8 +35,12 @@ class Supplicant:
         if self._last_notification:
             self._last_notification.close()
         n = Notify.Notification.new("AirBears Supplicant", body, self.status_icon.icon_path())
+        n.connect('closed', self._on_notification_close)
         n.show()
         self._last_notification = n
+
+    def _on_notification_close(self, *args):
+        self.status_icon.show()
     
     def on_wifi_connected(self, network_monitor, ssid):
         logger.debug("Supplicant received signal we are connected to SSID: %s" % ssid)

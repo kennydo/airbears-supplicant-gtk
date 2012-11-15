@@ -18,6 +18,8 @@ class Supplicant:
         
         self._wifi_connected_signal = self.network_monitor.connect('wifi-connected',
                                                                     self.on_wifi_connected)
+        self._calnet_window_opened_signal = self.status_icon.connect('calnet-authn-window-opened',
+                                                                     self._on_calnet_authn_window_opened)
         
     def start(self):
         Notify.init("AirBears Supplicant")
@@ -63,6 +65,12 @@ class Supplicant:
             logger.debug("Authenticaton to ResComp returned: %s" % authentication)
         else:
             logger.debug("Connected to non-CalNet-authed network")
+
+    def _on_calnet_authn_window_opened(self, status_icon, window):
+        self._window_save_failed_signal = window.connect('save-failed',
+                                                         self._on_authn_save_failed)
+    def _on_authn_save_failed(self, window, reason):
+        self.notify(reason)
 
 def main(*args, **kwargs):
     credential_store = GnomeCredentialStore()

@@ -149,7 +149,7 @@ class AirBearsAuthenticator(BaseAuthenticator):
             self.service.notify("DNS resolution failed. Giving up.")
             return False
             
-        calnet_content =  self.url_opener.open(cas_url).read()
+        calnet_content =  self.url_opener.open(self.cas_url).read()
         if "already logged in to" in calnet_content:
             logger.debug("CalNet was already logged in before attempting authentication")
             return True

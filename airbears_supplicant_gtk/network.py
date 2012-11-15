@@ -32,14 +32,6 @@ class NetworkMonitor(GObject.GObject):
         """
         raise NotImplementedError()
 
-def _byte_to_string(char):
-    if 32 <= char < 127:
-        return "%c" % char
-    else:
-        return urllib.quote(chr(char))
-
-def _byte_array_to_string(bs):
-    return ''.join([_byte_to_string(char) for char in bs])
 
 class NetworkManagerMonitor(NetworkMonitor):
     NM_SERVICE = 'org.freedesktop.NetworkManager'
